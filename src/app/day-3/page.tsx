@@ -33,66 +33,115 @@ import {
   Close,
   Image,
   LocalGasStation as YpfIcon,
+  LocalGasStationOutlined as AxionIcon,
+  LocalParking as PumaIcon,
   LocalDrink as ShellIcon
 } from '@mui/icons-material';
 
 // Datos del viaje
 const routeData = {
-  origin: 'Mar del Plata, Buenos Aires',
-  destination: 'Bahía Blanca, Buenos Aires',
-  totalDistance: '489 km',
-  estimatedTime: '6 horas 30 minutos',
-  fuelStops: 2,
-  restStops: 1,
-  mainRoute: 'Ruta Nacional 228'
+  origin: 'Bariloche',
+  destination: 'San Martin de los Andes',
+  totalDistance: '199 km',
+  fuelStops: 1,
+  estimatedTime: '3 horas 18 minutos',
 };
 
 const stations = [
   {
-    name: 'Estación de Servicio YPF Necochea',
-    location: 'Necochea, Buenos Aires',
-    km: 130,
-    brand: 'ypf',
+    name: 'AXION energy',
+    brand: 'axion',
+    location: 'San Martín 647, R8400 San Carlos de Bariloche, Río Negro',
+    km: 5,
     services: ['Combustible', 'Baños', 'Tienda']
   },
-  {
-    name: 'Estación Shell Tres Arroyos',
-    location: 'Tres Arroyos, Buenos Aires',
-    km: 320,
-    brand: 'shell',
-    services: ['Combustible', 'Minimarket', 'Baños']
-  }
 ];
 
 const itinerary = [
+  // Ida
   {
-    time: '13:00',
-    activity: 'Salida desde Mar del Plata',
-    description: 'Encuentro en el punto de partida, con Diego y Roscio'
+    time: '07:00',
+    activity: 'Salida desde Bariloche',
+    description: 'Comienza el viaje rumbo a San Martin de los Andes'
   },
   {
-    time: '15:30',
-    activity: 'Estación de Servicio YPF Necochea',
-    description: 'Descanso y carga de combustible',
-    brand: 'ypf',
-    km: 130
+    time: '07:10',
+    activity: 'AXION energy',
+    description: 'Primera carga de combustible',
+    brand: 'axion',
+    km: 5
   },
   {
-    time: '17:30',
-    activity: 'Estación Shell Tres Arroyos',
-    description: 'Última carga de combustible antes del destino',
-    brand: 'shell',
-    km: 320
+    time: '08:30',
+    activity: 'Lago Espejo',
+    description: 'Parada y visita al Lago Espejo (20 min)',
+    km: 90
   },
   {
-    time: '19:00',
-    activity: 'Llegada a Bahía Blanca',
-    description: 'Check-in en el hotel y descanso'
+    time: '09:10',
+    activity: 'Lago Correntoso',
+    description: 'Parada y visita al Lago Correntoso (20 min)',
+    km: 95
+  },
+  {
+    time: '09:50',
+    activity: 'Lago Escondido',
+    description: 'Parada y visita al Lago Escondido (20 min)',
+    km: 105
+  },
+  {
+    time: '10:30',
+    activity: 'Lago Villarino',
+    description: 'Parada y visita al Lago Villarino (20 min)',
+    km: 120
+  },
+  {
+    time: '11:10',
+    activity: 'Lago Falkner',
+    description: 'Parada y visita al Lago Falkner (20 min)',
+    km: 125
+  },
+  {
+    time: '11:50',
+    activity: 'Lago Hermoso',
+    description: 'Parada y visita al Lago Hermoso (20 min)',
+    km: 140
+  },
+  {
+    time: '12:30',
+    activity: 'Lago Machónico',
+    description: 'Parada y visita al Lago Machónico (20 min)',
+    km: 170
+  },
+  {
+    time: '13:30',
+    activity: 'San Martin de los Andes',
+    description: 'Llegada a San Martin de los Andes y carga final',
+    km: 199
+  },
+  // Vuelta
+  {
+    time: '17:00',
+    activity: 'Salida desde San Martin de los Andes',
+    description: 'Comienza el regreso a Bariloche'
+  },
+  {
+    time: '19:30',
+    activity: 'AXION energy',
+    description: 'Parada para recarga de combustible',
+    brand: 'axion',
+    km: 194
+  },
+  {
+    time: '20:20',
+    activity: 'Llegada a Bariloche',
+    description: 'Fin del viaje de ida y vuelta',
+    km: 199
   }
 ];
 
-// Tipo para spots turísticos
-type BahiaBlancaSpot = {
+// Tipo para spots turísticos de Bariloche
+type BarilocheSpot = {
   title: string;
   image: string;
   mapsUrl: string;
@@ -100,41 +149,41 @@ type BahiaBlancaSpot = {
   color?: string;
 };
 
-const bahiaBlancaSpots: BahiaBlancaSpot[] = [
+const barilocheSpots: BarilocheSpot[] = [
   {
-    title: 'Parque de Mayo',
-    image: '/images/bahiablanca-1.jpg',
-    mapsUrl: 'https://maps.app.goo.gl/mxoWzheyqCYFFQ6t8',
-    category: 'Parque',
-    color: '#2e7d32'
-  },
-  {
-    title: 'Teatro Municipal',
-    image: '/images/bahiablanca-2.jpg',
-    mapsUrl: 'https://maps.app.goo.gl/B6xcViXP6SCQHNEq6',
-    category: 'Cultura',
-    color: '#7b1fa2'
-  },
-  {
-    title: 'Museo y Archivo Histórico',
-    image: '/images/bahiablanca-3.jpg',
-    mapsUrl: 'https://maps.app.goo.gl/ZLgHwvunJrwLy4Xv9',
-    category: 'Historia',
+    title: 'Playa San Martin',
+    image: '/images/sanmartindelosandes-1.jpg',
+    mapsUrl: 'https://maps.app.goo.gl/FD42U4q76XFTt2FX7',
+    category: 'Mirador',
     color: '#1976d2'
   },
   {
-    title: 'Bahia Blanca Plaza Shopping',
-    image: '/images/bahiablanca-4.jpg',
-    mapsUrl: 'https://maps.app.goo.gl/n1kRcMrsmXKYdCzE9',
-    category: 'Compras',
-    color: '#d2c619ff'
+    title: 'Mirador El árbol',
+    image: '/images/sanmartindelosandes-2.jpg',
+    mapsUrl: 'https://maps.app.goo.gl/K1Xq74txYtjA3NpT7',
+    category: 'Mirador',
+    color: '#7b1fa2'
+  },
+  {
+    title: 'Mirador Arrayanes',
+    image: '/images/sanmartindelosandes-3.jpg',
+    mapsUrl: 'https://maps.app.goo.gl/8QN43eoxQmqxqaHs6',
+    category: 'Mirador',
+    color: '#1976d2'
+  },
+  {
+    title: 'Bodegón la Popular',
+    image: '/images/sanmartindelosandes-4.jpeg',
+    mapsUrl: 'https://maps.app.goo.gl/snAGx5LkcBLJvPVs5',
+    category: 'Pueblo',
+    color: '#2e7d32'
   }
 ];
 
-const Day1Page = () => {
+const Day2Page = () => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [spotModalOpen, setSpotModalOpen] = useState(false);
-  const [selectedSpot, setSelectedSpot] = useState<BahiaBlancaSpot | null>(null);
+  const [selectedSpot, setSelectedSpot] = useState<BarilocheSpot | null>(null);
 
   const handleOpenImageModal = () => {
     setImageModalOpen(true);
@@ -144,7 +193,7 @@ const Day1Page = () => {
     setImageModalOpen(false);
   };
 
-  const handleOpenSpotModal = (spot: BahiaBlancaSpot) => {
+  const handleOpenSpotModal = (spot: BarilocheSpot) => {
     setSelectedSpot(spot);
     setSpotModalOpen(true);
   };
@@ -171,16 +220,16 @@ const Day1Page = () => {
           <Box display="flex" alignItems="center" justifyContent="space-between">
             <Box display="flex" alignItems="center">
               <Link href="/" passHref>
-                <IconButton sx={{ mr: 2, color: 'primary.main' }}>
+                <IconButton sx={{ mr: 2, color: 'warning.main' }}>
                   <ArrowBack />
                 </IconButton>
               </Link>
-              <Typography variant="h5" fontWeight="600" color="primary">
-                Día 1: Viaje a Bahía Blanca
+              <Typography variant="h5" fontWeight="600" color="warning">
+                Día 2: San Martin de los Andes
               </Typography>
             </Box>
             <Chip
-              label="489 KM"
+              label="398 KM"
               color="primary"
               variant="filled"
               size="medium"
@@ -200,7 +249,7 @@ const Day1Page = () => {
           <Card sx={{ mb: 4, position: 'relative', overflow: 'hidden' }}>
             <Box
               sx={{
-                backgroundImage: 'linear-gradient(135deg, #00bcd4 0%, #0097a7 100%)',
+                backgroundImage: 'linear-gradient(135deg, #e4fc0f93 0%, #6d740aa6 100%)',
                 color: 'white',
                 p: 4
               }}
@@ -208,7 +257,7 @@ const Day1Page = () => {
               <Grid container spacing={4} alignItems="center">
                 <Grid size={{ xs: 12, md: 8 }}>
                   <Typography variant="h3" fontWeight="700" gutterBottom>
-                    Mar del Plata → Bahía Blanca
+                    Bariloche a San Martin de los Andes
                   </Typography>
                   <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
                     Comenzamos nuestra aventura hacia la Patagonia
@@ -234,13 +283,7 @@ const Day1Page = () => {
                   <Button
                     variant="contained"
                     fullWidth
-                    sx={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                      color: 'white',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.3)'
-                      }
-                    }}
+                    sx={{background:'white'}}
                     startIcon={<Image />}
                     onClick={handleOpenImageModal}
                   >
@@ -268,7 +311,7 @@ const Day1Page = () => {
                       height: '100%',
                       cursor: 'pointer',
                       position: 'relative',
-                      backgroundImage: 'url(/images/mdp-bahiablanca.jpg)',
+                      backgroundImage: 'url(/images/bahiablanca-bariloche.jpg)',
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       backgroundRepeat: 'no-repeat',
@@ -309,56 +352,59 @@ const Day1Page = () => {
             >
               <Card>
                 <CardContent>
-                  <Typography variant="h5" fontWeight="600" gutterBottom color="primary">
+                  <Typography variant="h5" fontWeight="600" gutterBottom color="warning">
                     Cronograma del Viaje
                   </Typography>
                   <List>
-                    {itinerary.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 20, opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        viewport={{ once: true }}
-                      >
-                        <ListItem sx={{ px: 0 }}>
-                          <ListItemIcon>
-                            <Box
-                              sx={{
-                                backgroundColor: item.brand === 'ypf' ? '#005baa' : item.brand === 'shell' ? '#ffd600' : 'primary.main',
-                                color: item.brand ? '#fff' : 'white',
-                                borderRadius: '50%',
-                                width: 40,
-                                height: 40,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                position: 'relative',
-                              }}
-                            >
-                              
-                              <Typography variant="body2" fontWeight="600" sx={{ zIndex: 2 }}>
-                                {item.time}
-                              </Typography>
-                            </Box>
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography variant="subtitle1" fontWeight="600">
-                                {item.activity}
-                                {item.km !== undefined && (
-                                  <span style={{ color: '#888', fontWeight: 400, fontSize: '0.95em', marginLeft: 8 }}>
-                                    (KM {item.km})
-                                  </span>
-                                )}
-                              </Typography>
-                            }
-                            secondary={item.description}
-                          />
-                        </ListItem>
-                        {index < itinerary.length - 1 && <Divider sx={{ my: 1 }} />}
-                      </motion.div>
-                    ))}
+                    {itinerary.map((item, index) => {
+                      // Detectar si es un lago
+                      const isLago = item.activity?.toLowerCase().includes('lago');
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 20, opacity: 0 }}
+                          whileInView={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                        >
+                          <ListItem sx={{ px: 0 }}>
+                            <ListItemIcon>
+                              <Box
+                                sx={{
+                                  backgroundColor: item.brand === 'ypf' ? '#005baa' : item.brand === 'shell' ? '#ffd600' : item.brand === 'axion' ? '#c2185b' : item.brand === 'puma' ? '#43ea7c' : isLago ? 'info.main' : 'warning.main',
+                                  color: item.brand || isLago ? '#fff' : 'white',
+                                  borderRadius: '50%',
+                                  width: 40,
+                                  height: 40,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  position: 'relative',
+                                }}
+                              >
+                                <Typography variant="body2" fontWeight="600" sx={{ zIndex: 2 }}>
+                                  {item.time}
+                                </Typography>
+                              </Box>
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={
+                                <Typography variant="subtitle1" fontWeight="600">
+                                  {item.activity}
+                                  {item.km !== undefined && (
+                                    <span style={{ color: '#888', fontWeight: 400, fontSize: '0.95em', marginLeft: 8 }}>
+                                      (KM {item.km})
+                                    </span>
+                                  )}
+                                </Typography>
+                              }
+                              secondary={item.description}
+                            />
+                          </ListItem>
+                          {index < itinerary.length - 1 && <Divider sx={{ my: 1 }} />}
+                        </motion.div>
+                      );
+                    })}
                   </List>
                 </CardContent>
               </Card>
@@ -373,7 +419,7 @@ const Day1Page = () => {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Typography variant="h5" fontWeight="600" gutterBottom color="primary">
+              <Typography variant="h5" fontWeight="600" gutterBottom color="warning">
                 Estaciones y Paradas Estratégicas
               </Typography>
               <Grid container spacing={3}>
@@ -388,13 +434,15 @@ const Day1Page = () => {
                       <Card sx={{ height: '100%' }}>
                         <CardContent>
                           <Box display="flex" alignItems="center" mb={2}>
-                              {/* Icono de la marca */}
-                              {station.brand === 'ypf' && <YpfIcon sx={{ color: '#005baa', mr: 1.2 }} />}
-                              {station.brand === 'shell' && <ShellIcon sx={{ color: '#ffd600', mr: 1.2 }} />}
-                              <Typography variant="h6" fontWeight="600">
-                                {station.name}
-                              </Typography>
-                            </Box>
+                            {/* Icono de la marca */}
+                            {station.brand === 'ypf' && <YpfIcon sx={{ color: '#005baa', mr: 1.2 }} />}
+                            {station.brand === 'shell' && <ShellIcon sx={{ color: '#ffd600', mr: 1.2 }} />}
+                            {station.brand === 'axion' && <AxionIcon sx={{ color: '#c2185b', mr: 1.2 }} />}
+                            {station.brand === 'puma' && <PumaIcon sx={{ color: '#43ea7c', mr: 1.2 }} />}
+                            <Typography variant="h6" fontWeight="600">
+                              {station.name}
+                            </Typography>
+                          </Box>
                           <Typography variant="body2" color="text.secondary" gutterBottom>
                             {station.location}
                           </Typography>
@@ -471,12 +519,13 @@ const Day1Page = () => {
           />
         </Paper>
       </Modal>
-      {/* Sección: Lugares turísticos para visitar en Bahía Blanca */}
+
+      {/* Sección: Lugares turísticos para visitar en Bariloche */}
       <Container maxWidth="sm" sx={{ py: 6 }}>
-        <Typography variant="h5" fontWeight="600" color="primary" gutterBottom>
-          Posibles lugares para visitar en Bahía Blanca
+        <Typography variant="h5" fontWeight="600" color="warning" gutterBottom>
+          Posibles lugares para visitar en Bariloche
         </Typography>
-          {bahiaBlancaSpots.map((spot, idx) => (
+          {barilocheSpots.map((spot, idx) => (
             <Box
               component="button"
               onClick={() => handleOpenSpotModal(spot)}
@@ -581,4 +630,4 @@ const Day1Page = () => {
   );
 };
 
-export default Day1Page;
+export default Day2Page;

@@ -31,7 +31,11 @@ import {
   Schedule,
   LocalGasStation,
   Close,
-  Image
+  Image,
+  LocalGasStation as YpfIcon,
+  LocalGasStationOutlined as AxionIcon,
+  LocalParking as PumaIcon,
+  LocalDrink as ShellIcon
 } from '@mui/icons-material';
 
 // Datos del viaje
@@ -48,48 +52,70 @@ const routeData = {
 const stations = [
   {
     name: 'YPF Bahía Blanca',
+    brand: 'ypf',
     location: 'Bahía Blanca, Buenos Aires',
     km: 0,
     services: ['Combustible', 'Baños', 'Tienda']
   },
   {
-    name: 'Axion Choele Choel',
-    location: 'Choele Choel, Río Negro',
-    km: 260,
+    name: 'YPF Rio Colorado',
+    brand: 'ypf',
+    location: 'Av. Colón 1234, Bahía Blanca, Buenos Aires',
+    km: 170,
     services: ['Combustible', 'Baños', 'Tienda']
   },
   {
-    name: 'Shell General Roca',
-    location: 'General Roca, Río Negro',
-    km: 480,
-    services: ['Combustible', 'Minimarket', 'Baños']
-  },
-  {
-    name: 'YPF Cipolletti',
-    location: 'Cipolletti, Río Negro',
-    km: 570,
+    name: 'AXION Los Vascos',
+    brand: 'axion',
+    location: 'Ruta Nacional N° 251 Km. 119, Gral. Conesa, Río Negro',
+    km: 328,
     services: ['Combustible', 'Baños', 'Tienda']
   },
   {
-    name: 'Axion Piedra del Águila',
-    location: 'Piedra del Águila, Neuquén',
-    km: 760,
+    name: 'SHELL San Antonio Oeste',
+    brand: 'shell',
+    location: 'Shell, RN251 Ruta 3, R8520 San Antonio Oeste, Río Negro',
+    km: 414,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'YPF Lujanera SRL',
+    brand: 'ypf',
+    location: 'YPF Lujanera SRL, R8536 Valcheta, Río Negro',
+    km: 525,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'YPF ACA Los Menucos',
+    brand: 'ypf',
+    location: 'Ruta Nacional 23, RP8 y, R8424 Los Menucos, Río Negro',
+    km: 718,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'Estación de Servicio PUMA, La Meseta SRL',
+    brand: 'puma',
+    location: 'MF76+H77, Ingeniero Jacobacci, Río Negro',
+    km: 864,
     services: ['Combustible', 'Baños', 'Tienda']
   },
   {
     name: 'Shell Dina Huapi',
+    brand: 'shell',
     location: 'Dina Huapi, Río Negro',
     km: 1020,
     services: ['Combustible', 'Minimarket', 'Baños']
   },
   {
     name: 'YPF Bariloche',
+    brand: 'ypf',
     location: 'Bariloche, Río Negro',
     km: 1060,
     services: ['Combustible', 'Baños', 'Tienda']
   }
 ];
 
+// Itinerario con paradas validadas de stations y horas estimadas
 const itinerary = [
   {
     time: '07:00',
@@ -97,34 +123,67 @@ const itinerary = [
     description: 'Comienza el viaje rumbo a Bariloche'
   },
   {
+    time: '07:10',
+    activity: 'YPF Bahía Blanca',
+    description: 'Primera carga de combustible',
+    brand: 'ypf',
+    km: 0
+  },
+  {
     time: '09:30',
-    activity: 'Parada en Axion Choele Choel',
-    description: 'Primera carga de combustible y descanso breve'
+    activity: 'YPF Rio Colorado',
+    description: 'Parada para combustible y descanso',
+    brand: 'ypf',
+    km: 170
   },
   {
-    time: '12:00',
-    activity: 'Parada en Shell General Roca',
-    description: 'Segunda carga de combustible y snack'
+    time: '11:30',
+    activity: 'AXION Los Vascos',
+    description: 'Parada para combustible y snack',
+    brand: 'axion',
+    km: 328
   },
   {
-    time: '13:30',
-    activity: 'Parada en YPF Cipolletti',
-    description: 'Tercera carga de combustible y almuerzo rápido'
+    time: '13:00',
+    activity: 'SHELL San Antonio Oeste',
+    description: 'Parada para combustible y almuerzo',
+    brand: 'shell',
+    km: 414
   },
   {
-    time: '15:30',
-    activity: 'Parada en Axion Piedra del Águila',
-    description: 'Cuarta carga de combustible y descanso'
+    time: '15:00',
+    activity: 'YPF Lujanera SRL',
+    description: 'Parada para combustible y descanso',
+    brand: 'ypf',
+    km: 525
   },
   {
-    time: '17:30',
-    activity: 'Parada en Shell Dina Huapi',
-    description: 'Quinta carga de combustible antes de llegar a destino'
+    time: '16:30',
+    activity: 'YPF ACA Los Menucos',
+    description: 'Parada para combustible y snack',
+    brand: 'ypf',
+    km: 718
   },
   {
-    time: '19:09',
-    activity: 'Llegada a Bariloche',
-    description: 'Check-in en el hotel y descanso final'
+    time: '18:00',
+    activity: 'Estación de Servicio PUMA, La Meseta SRL',
+    description: 'Parada para combustible y descanso',
+    brand: 'puma',
+    km: 864
+  },
+  {
+    time: '19:00',
+    activity: 'Shell Dina Huapi',
+    description: 'Última parada antes de llegar a destino',
+    brand: 'shell',
+    km: 1020
+  },
+  {
+    time: '19:30',
+    activity: 'YPF Bariloche',
+    description: 'Llegada a Bariloche y carga final',
+    brand: 'ypf',
+    km: 1060
   }
 ];
 
@@ -141,28 +200,28 @@ const barilocheSpots: BarilocheSpot[] = [
   {
     title: 'Centro Cívico',
     image: '/images/bariloche-1.jpeg',
-    mapsUrl: 'https://goo.gl/maps/8QvQw2Qw2QvQw2Qw7',
+    mapsUrl: 'https://maps.app.goo.gl/hdZ69o17Vjr5dSQU6',
     category: 'Centro',
     color: '#1976d2'
   },
   {
     title: 'Cerro Campanario',
     image: '/images/bariloche-2.webp',
-    mapsUrl: 'https://goo.gl/maps/2QvQw2Qw2QvQw2Qw8',
+    mapsUrl: 'https://maps.app.goo.gl/LBawqpvWsRb19NKF9',
     category: 'Mirador',
     color: '#7b1fa2'
   },
   {
     title: 'Lago Nahuel Huapi',
     image: '/images/bariloche-3.jpg',
-    mapsUrl: 'https://goo.gl/maps/3QvQw2Qw2QvQw2Qw9',
+    mapsUrl: 'https://maps.app.goo.gl/8QN43eoxQmqxqaHs6',
     category: 'Lago',
     color: '#1976d2'
   },
   {
     title: 'Colonia Suiza',
     image: '/images/bariloche-4.jpeg',
-    mapsUrl: 'https://goo.gl/maps/4QvQw2Qw2QvQw2Qw0',
+    mapsUrl: 'https://maps.app.goo.gl/snAGx5LkcBLJvPVs5',
     category: 'Pueblo',
     color: '#2e7d32'
   }
@@ -356,17 +415,18 @@ const Day2Page = () => {
                           <ListItemIcon>
                             <Box
                               sx={{
-                                backgroundColor: 'success.main',
-                                color: 'white',
+                                backgroundColor: item.brand === 'ypf' ? '#005baa' : item.brand === 'shell' ? '#ffd600' : item.brand === 'axion' ? '#c2185b' : item.brand === 'puma' ? '#43ea7c' : 'success.main',
+                                color: item.brand ? '#fff' : 'white',
                                 borderRadius: '50%',
                                 width: 40,
                                 height: 40,
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                position: 'relative',
                               }}
                             >
-                              <Typography variant="body2" fontWeight="600">
+                              <Typography variant="body2" fontWeight="600" sx={{ zIndex: 2 }}>
                                 {item.time}
                               </Typography>
                             </Box>
@@ -375,6 +435,11 @@ const Day2Page = () => {
                             primary={
                               <Typography variant="subtitle1" fontWeight="600">
                                 {item.activity}
+                                {item.km !== undefined && (
+                                  <span style={{ color: '#888', fontWeight: 400, fontSize: '0.95em', marginLeft: 8 }}>
+                                    (KM {item.km})
+                                  </span>
+                                )}
                               </Typography>
                             }
                             secondary={item.description}
@@ -412,7 +477,11 @@ const Day2Page = () => {
                       <Card sx={{ height: '100%' }}>
                         <CardContent>
                           <Box display="flex" alignItems="center" mb={2}>
-                            <LocationOn color="success" sx={{ mr: 1 }} />
+                            {/* Icono de la marca */}
+                            {station.brand === 'ypf' && <YpfIcon sx={{ color: '#005baa', mr: 1.2 }} />}
+                            {station.brand === 'shell' && <ShellIcon sx={{ color: '#ffd600', mr: 1.2 }} />}
+                            {station.brand === 'axion' && <AxionIcon sx={{ color: '#c2185b', mr: 1.2 }} />}
+                            {station.brand === 'puma' && <PumaIcon sx={{ color: '#43ea7c', mr: 1.2 }} />}
                             <Typography variant="h6" fontWeight="600">
                               {station.name}
                             </Typography>

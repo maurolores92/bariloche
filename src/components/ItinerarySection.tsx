@@ -24,6 +24,7 @@ import {
 
 interface DayActivity {
   day: number;
+  date: string; // Nueva propiedad para la fecha
   title: string;
   activities: string[];
   icon: React.ReactNode;
@@ -35,6 +36,7 @@ interface DayActivity {
 const itineraryData: DayActivity[] = [
   {
     day: 1,
+    date: '25/11/2025',
     title: 'Viaje a Bahía Blanca',
     activities: ['Salida desde Mar del Plata', 'Paradas estratégicas', 'Llegada a Bahía Blanca', 'Check-in hotel'],
     icon: <Hiking />,
@@ -44,6 +46,7 @@ const itineraryData: DayActivity[] = [
   },
   {
     day: 2,
+    date: '26/11/2025',
     title: 'Viaje a Bariloche',
     activities: [
       'Salida desde Bahía Blanca',
@@ -58,49 +61,54 @@ const itineraryData: DayActivity[] = [
   },
   {
     day: 3,
-    title: 'Circuito Chico',
-    activities: ['Salida temprano al Circuito Chico', 'Cerro Campanario', 'Playa Bonita', 'Villa La Angostura'],
+    date: '27/11/2025',
+    title: 'San Martin de los Andes',
+    activities: ['Salida temprano a San Martin de los Andes', 'Villa La Angostura', 'Los 7 Lagos'],
     icon: <CameraAlt />,
     color: 'warning',
-    description: 'El circuito más hermoso de la región',
+    description: 'San Martin de los Andes y los paisajes de los 7 Lagos',
     url: '/day-3'
   },
-  {
-    day: 4,
-    title: 'Navegación y Bosque',
-    activities: ['Navegación Lago Nahuel Huapi', 'Isla Victoria', 'Bosque de Arrayanes', 'Paseo en Puerto Pañuelo'],
-    icon: <DirectionsBoat />,
-    color: 'info',
-    description: 'Día de navegación por lagos cristalinos',
-    url: '/day-4'
-  },
-  {
-    day: 5,
-    title: 'Aventura en Cerro Otto',
-    activities: ['Teleférico Cerro Otto', 'Casa de Té Giratoria', 'Actividades de aventura', 'Compras en el centro'],
-    icon: <LocalActivity />,
-    color: 'secondary',
-    description: 'Adrenalina y vistas panorámicas',
-    url: '/day-5'
-  },
-  {
-    day: 6,
-    title: 'Día de Relax',
-    activities: ['Descanso en el hotel', 'Spa y relajación', 'Paseo por la costanera', 'Cena especial de despedida'],
-    icon: <Restaurant />,
-    color: 'error',
-    description: 'Última noche en el paraíso patagónico',
-    url: '/day-6'
-  },
-  {
-    day: 7,
-    title: 'Regreso a casa',
-    activities: ['Desayuno tranquilo', 'Check-out del hotel', 'Últimas compras', 'Vuelo Bariloche - Buenos Aires'],
-    icon: <FlightLand />,
-    color: 'primary',
-    description: 'Con el corazón lleno de recuerdos',
-    url: '/day-7'
-  }
+  // {
+  //   day: 4,
+  //   date: '28/11/2025',
+  //   title: 'Navegación y Bosque',
+  //   activities: ['Navegación Lago Nahuel Huapi', 'Isla Victoria', 'Bosque de Arrayanes', 'Paseo en Puerto Pañuelo'],
+  //   icon: <DirectionsBoat />,
+  //   color: 'info',
+  //   description: 'Día de navegación por lagos cristalinos',
+  //   url: '/day-4'
+  // },
+  // {
+  //   day: 5,
+  //   date: '29/11/2025',
+  //   title: 'Aventura en Cerro Otto',
+  //   activities: ['Teleférico Cerro Otto', 'Casa de Té Giratoria', 'Actividades de aventura', 'Compras en el centro'],
+  //   icon: <LocalActivity />,
+  //   color: 'secondary',
+  //   description: 'Adrenalina y vistas panorámicas',
+  //   url: '/day-5'
+  // },
+  // {
+  //   day: 6,
+  //   date: '30/11/2025',
+  //   title: 'Día de Relax',
+  //   activities: ['Descanso en el hotel', 'Spa y relajación', 'Paseo por la costanera', 'Cena especial de despedida'],
+  //   icon: <Restaurant />,
+  //   color: 'error',
+  //   description: 'Última noche en el paraíso patagónico',
+  //   url: '/day-6'
+  // },
+  // {
+  //   day: 7,
+  //   date: '01/12/2025',
+  //   title: 'Regreso a casa',
+  //   activities: ['Desayuno tranquilo', 'Check-out del hotel', 'Últimas compras', 'Vuelo Bariloche - Buenos Aires'],
+  //   icon: <FlightLand />,
+  //   color: 'primary',
+  //   description: 'Con el corazón lleno de recuerdos',
+  //   url: '/day-7'
+  // }
 ];
 
 const ItinerarySection = () => {
@@ -169,7 +177,7 @@ const ItinerarySection = () => {
                         </Box>
                         <Box>
                           <Typography variant="subtitle1" color={`${day.color}`} fontWeight="600" sx={{ fontSize: '1rem', lineHeight: 1.1 }}>
-                            Día {day.day}
+                            Día {day.day} <span style={{ fontWeight: 400, color: '#aaa', fontSize: '0.92em', marginLeft: 6 }}>{day.date}</span>
                           </Typography>
                           <Typography variant="body1" fontWeight="500" sx={{ fontSize: '0.95rem', lineHeight: 1.1 }}>
                             {day.title}

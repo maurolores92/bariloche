@@ -17,11 +17,6 @@ import {
 
 const Header = () => {
   return (
-    <motion.div
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
       <AppBar position="fixed" sx={{ 
         backgroundColor: 'rgba(30, 30, 30, 0.95)', 
         backdropFilter: 'blur(20px)',
@@ -47,7 +42,6 @@ const Header = () => {
           </Toolbar>
         </Container>
       </AppBar>
-    </motion.div>
   );
 };
 

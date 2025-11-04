@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
   Box, 
@@ -11,6 +12,18 @@ import {
   CardContent,
 } from '@mui/material';
 
+
+// Itinerary data (debe estar sincronizado con ItinerarySection)
+const itineraryData = [
+  { day: 1, date: '2025-11-25', title: 'Viaje a Bahía Blanca', url: '/day-1' },
+  { day: 2, date: '2025-11-26', title: 'Viaje a Bariloche', url: '/day-2' },
+  { day: 3, date: '2025-11-27', title: 'Circuito Chico', url: '/day-3' },
+  { day: 4, date: '2025-11-28', title: 'Navegación y Bosque', url: '/day-4' },
+  { day: 5, date: '2025-11-29', title: 'Aventura en Cerro Otto', url: '/day-5' },
+  { day: 6, date: '2025-11-30', title: 'Día de Relax', url: '/day-6' },
+  { day: 7, date: '2025-12-01', title: 'Regreso a casa', url: '/day-7' },
+];
+
 const Hero = () => {
   const [timeLeft, setTimeLeft] = useState<{
     days: number;
@@ -18,10 +31,16 @@ const Hero = () => {
     minutes: number;
     seconds: number;
   } | null>(null);
-  const [isToday, setIsToday] = useState(false);
+  const [currentDay, setCurrentDay] = useState<null | { day: number; title: string; url: string; date: string }>(null);
 
   useEffect(() => {
-    const targetDate = new Date('2025-11-24T00:00:00'); // Lunes 24 de Noviembre 2025
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10); // yyyy-mm-dd
+    const foundDay = itineraryData.find(d => d.date === todayStr);
+    setCurrentDay(foundDay ? foundDay : null);
+
+    // Countdown hasta el primer día
+    const targetDate = new Date(itineraryData[0].date + 'T00:00:00');
 
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -32,18 +51,14 @@ const Hero = () => {
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
         setTimeLeft({ days, hours, minutes, seconds });
-        setIsToday(false);
       } else {
-        setIsToday(true);
         setTimeLeft(null);
       }
     };
 
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -131,7 +146,7 @@ const Hero = () => {
               </Typography>
             </motion.div>
 
-            {isToday ? (
+            {currentDay ? (
               <motion.div
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
@@ -143,30 +158,49 @@ const Hero = () => {
                   border: 'none',
                   mb: 4,
                   boxShadow: '0 4px 24px rgba(0,188,212,0.18)',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s',
+                  '&:hover': { transform: 'scale(1.03)' },
                 }}>
-                  <CardContent sx={{ p: 4 }}>
-                    <Typography
-                      variant="h4"
-                      sx={{
-                        color: '#fff',
-                        fontWeight: 700,
-                        mb: 2,
-                        textShadow: '0 2px 12px #0097a7',
-                      }}
-                    >
-                      🎉 ¡ES HOY!
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        color: '#fff',
-                        fontWeight: 500,
-                        textShadow: '0 2px 8px #1e1e1e',
-                      }}
-                    >
-                      Hoy comienza nuestra increíble aventura en Bariloche
-                    </Typography>
-                  </CardContent>
+                  <Link href={currentDay.url} style={{ textDecoration: 'none' }}>
+                    <CardContent sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          color: '#fff',
+                          fontWeight: 700,
+                          mb: 1.5,
+                          textShadow: '0 2px 12px #0097a7',
+                          letterSpacing: 1.5,
+                        }}
+                      >
+                        Día {currentDay.day}
+                      </Typography>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          color: '#fff',
+                          fontWeight: 600,
+                          mb: 1,
+                          textShadow: '0 2px 8px #1e1e1e',
+                          letterSpacing: 1,
+                        }}
+                      >
+                        {currentDay.title}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          color: '#fff',
+                          fontWeight: 400,
+                          opacity: 0.85,
+                          fontSize: '1.1rem',
+                        }}
+                      >
+                        ¡Haz click para ver el detalle!
+                      </Typography>
+                    </CardContent>
+                  </Link>
                 </Card>
               </motion.div>
             ) : timeLeft ? (
