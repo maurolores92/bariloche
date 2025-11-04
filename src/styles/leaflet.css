@@ -1,0 +1,23 @@
+/* Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
+/* Custom styles for Leaflet integration */
+.leaflet-container {
+  font-family: inherit !important;
+}
+
+.leaflet-popup-content {
+  font-family: inherit !important;
+  margin: 8px 12px !important;
+}
+
+.leaflet-popup-content h6 {
+  margin: 0 0 4px 0 !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.leaflet-popup-content p {
+  margin: 0 !important;
+  font-size: 0.875rem !important;
+}
