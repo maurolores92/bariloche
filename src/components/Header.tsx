@@ -43,12 +43,6 @@ const Header = () => {
               >
                 Itinerario
               </Button>
-              <Button 
-                sx={{ color: '#ffffff', '&:hover': { color: '#ff6b35', backgroundColor: 'rgba(255, 107, 53, 0.1)' } }}
-                startIcon={<LocationOn />}
-              >
-                Destinos
-              </Button>
             </Box>
           </Toolbar>
         </Container>

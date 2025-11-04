@@ -60,7 +60,7 @@ const Hero = () => {
         justifyContent: 'center',
         position: 'relative',
         px: 2,
-        py:15,
+        py:10,
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -94,21 +94,42 @@ const Hero = () => {
                   height: { xs: 200, sm: 200 },
                   width: 'auto',
                   objectFit: 'contain',
-                  filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))'
+                  filter: 'drop-shadow(0 0 24px #00bcd4) drop-shadow(0 0 12px #ff6b35)',
+                  transition: 'filter 0.3s',
                 }}
               />
             </Box>
-            
-            <Typography
-              variant="h6"
-              sx={{
-                color: '#b0bec5',
-                mb: 4,
-                fontWeight: 300,
-              }}
+
+            <motion.div
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.8, type: 'spring' }}
             >
-              Nuestra aventura en la Patagonia
-            </Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: '#fff',
+                  mb: 2,
+                  fontWeight: 700,
+                  letterSpacing: 1,
+                  textShadow: '0 2px 12px #00bcd4',
+                }}
+              >
+                🚗🌄 ¡Bariloche 2025 con amigos!
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  color: '#ff6b35',
+                  mb: 4,
+                  fontWeight: 400,
+                  letterSpacing: 1,
+                  textShadow: '0 2px 8px #1e1e1e',
+                }}
+              >
+                La aventura más esperada del año
+              </Typography>
+            </motion.div>
 
             {isToday ? (
               <motion.div
@@ -117,17 +138,20 @@ const Hero = () => {
                 transition={{ duration: 0.8, type: "spring" }}
               >
                 <Card sx={{ 
-                  backgroundColor: '#1e1e1e', 
-                  border: '2px solid #00bcd4',
-                  mb: 4
+                  background: 'linear-gradient(90deg, #00bcd4 0%, #ff6b35 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  mb: 4,
+                  boxShadow: '0 4px 24px rgba(0,188,212,0.18)',
                 }}>
                   <CardContent sx={{ p: 4 }}>
                     <Typography
                       variant="h4"
                       sx={{
-                        color: '#00bcd4',
+                        color: '#fff',
                         fontWeight: 700,
                         mb: 2,
+                        textShadow: '0 2px 12px #0097a7',
                       }}
                     >
                       🎉 ¡ES HOY!
@@ -135,8 +159,9 @@ const Hero = () => {
                     <Typography
                       variant="h6"
                       sx={{
-                        color: '#ffffff',
+                        color: '#fff',
                         fontWeight: 500,
+                        textShadow: '0 2px 8px #1e1e1e',
                       }}
                     >
                       Hoy comienza nuestra increíble aventura en Bariloche
@@ -145,59 +170,111 @@ const Hero = () => {
                 </Card>
               </motion.div>
             ) : timeLeft ? (
-              <Card sx={{ 
-                backgroundColor: '#1e1e1e', 
-                border: '1px solid rgba(0, 188, 212, 0.3)',
-                mb: 4
-              }}>
-                <CardContent sx={{ p: 3 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: '#00bcd4',
-                      mb: 3,
-                      fontWeight: 600,
-                    }}
-                  >
-                    Quedan para nuestro viaje:
-                  </Typography>
-                  
-                  <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={1}>
-                    <Box textAlign="center">
-                      <Typography variant="h4" sx={{ color: '#ffffff', fontWeight: 700 }}>
-                        {timeLeft.days}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#b0bec5' }}>
-                        DÍAS
-                      </Typography>
-                    </Box>
-                    <Box textAlign="center">
-                      <Typography variant="h4" sx={{ color: '#ffffff', fontWeight: 700 }}>
-                        {timeLeft.hours}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#b0bec5' }}>
-                        HORAS
-                      </Typography>
-                    </Box>
-                    <Box textAlign="center">
-                      <Typography variant="h4" sx={{ color: '#ffffff', fontWeight: 700 }}>
-                        {timeLeft.minutes}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#b0bec5' }}>
-                        MIN
-                      </Typography>
-                    </Box>
-                    <Box textAlign="center">
-                      <Typography variant="h4" sx={{ color: '#ffffff', fontWeight: 700 }}>
-                        {timeLeft.seconds}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: '#b0bec5' }}>
-                        SEG
+              <Box
+                sx={{
+                  background: 'rgba(255,255,255,0.95)',
+                  borderRadius: 4,
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
+                  px: 3,
+                  py: 3,
+                  mb: 4,
+                  maxWidth: 370,
+                  mx: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    color: '#222',
+                    mb: 2,
+                    fontWeight: 700,
+                    letterSpacing: 1,
+                  }}
+                >
+                  NOS VEMOS EN:
+                </Typography>
+                <Box display="flex" gap={2}>
+                  <Box textAlign="center">
+                    <Box
+                      sx={{
+                        background: 'linear-gradient(135deg, #00bcd4 60%, #4dd0e1 100%)',
+                        borderRadius: 2,
+                        minWidth: 48,
+                        py: 1,
+                        boxShadow: '0 2px 8px rgba(0,188,212,0.10)',
+                        mb: 0.5,
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, fontFamily: 'monospace', textShadow: '0 2px 8px #00bcd4' }}>
+                        {String(timeLeft.days).padStart(2, '0')}
                       </Typography>
                     </Box>
+                    <Typography variant="caption" sx={{ color: '#00bcd4', fontWeight: 500, letterSpacing: 1 }}>
+                      días
+                    </Typography>
                   </Box>
-                </CardContent>
-              </Card>
+                  <Box textAlign="center">
+                    <Box
+                      sx={{
+                        background: 'linear-gradient(135deg, #ff6b35 60%, #ff8a65 100%)',
+                        borderRadius: 2,
+                        minWidth: 48,
+                        py: 1,
+                        boxShadow: '0 2px 8px rgba(255,107,53,0.10)',
+                        mb: 0.5,
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, fontFamily: 'monospace', textShadow: '0 2px 8px #ff6b35' }}>
+                        {String(timeLeft.hours).padStart(2, '0')}
+                      </Typography>
+                    </Box>
+                    <Typography variant="caption" sx={{ color: '#ff6b35', fontWeight: 500, letterSpacing: 1 }}>
+                      horas
+                    </Typography>
+                  </Box>
+                  <Box textAlign="center">
+                    <Box
+                      sx={{
+                        background: 'linear-gradient(135deg, #43ea7c 60%, #00bcd4 100%)',
+                        borderRadius: 2,
+                        minWidth: 48,
+                        py: 1,
+                        boxShadow: '0 2px 8px rgba(67,234,124,0.10)',
+                        mb: 0.5,
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, fontFamily: 'monospace', textShadow: '0 2px 8px #43ea7c' }}>
+                        {String(timeLeft.minutes).padStart(2, '0')}
+                      </Typography>
+                    </Box>
+                    <Typography variant="caption" sx={{ color: '#43ea7c', fontWeight: 500, letterSpacing: 1 }}>
+                      min
+                    </Typography>
+                  </Box>
+                  <Box textAlign="center">
+                    <Box
+                      sx={{
+                        background: 'linear-gradient(135deg, #7b1fa2 60%, #ff6b35 100%)',
+                        borderRadius: 2,
+                        minWidth: 48,
+                        py: 1,
+                        boxShadow: '0 2px 8px rgba(123,31,162,0.10)',
+                        mb: 0.5,
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, fontFamily: 'monospace', textShadow: '0 2px 8px #7b1fa2' }}>
+                        {String(timeLeft.seconds).padStart(2, '0')}
+                      </Typography>
+                    </Box>
+                    <Typography variant="caption" sx={{ color: '#7b1fa2', fontWeight: 500, letterSpacing: 1 }}>
+                      seg
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
             ) : null}
 
             <Box display="flex" flexDirection="column" gap={2}>
@@ -206,9 +283,20 @@ const Hero = () => {
                 size="large"
                 color="primary"
                 fullWidth
-                sx={{ py: 1.5 }}
+                sx={{
+                  py: 1.5,
+                  background: 'linear-gradient(90deg, #00bcd4 0%, #ff6b35 100%)',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '1.1rem',
+                  boxShadow: '0 4px 16px rgba(0,188,212,0.18)',
+                  transition: 'background 0.3s',
+                  '&:hover': {
+                    background: 'linear-gradient(90deg, #ff6b35 0%, #00bcd4 100%)',
+                  },
+                }}
               >
-                Ver Itinerario Completo
+                Ver Itinerario Completo 🚀
               </Button>
             </Box>
           </Box>

@@ -19,7 +19,6 @@ export default function Home() {
         <Header />
         <Hero />
         <ItinerarySection />
-        <MapSection />
         <HighlightsSection />
         <Footer />
       </div>
