@@ -69,16 +69,22 @@ const itineraryData: DayActivity[] = [
     description: 'San Martin de los Andes y los paisajes de los 7 Lagos',
     url: '/day-3'
   },
-  // {
-  //   day: 4,
-  //   date: '28/11/2025',
-  //   title: 'Navegación y Bosque',
-  //   activities: ['Navegación Lago Nahuel Huapi', 'Isla Victoria', 'Bosque de Arrayanes', 'Paseo en Puerto Pañuelo'],
-  //   icon: <DirectionsBoat />,
-  //   color: 'info',
-  //   description: 'Día de navegación por lagos cristalinos',
-  //   url: '/day-4'
-  // },
+  {
+    day: 4,
+    date: '28/11/2025',
+    title: 'Circuito Bariloche, Cerro Campanario y Colonia Suiza',
+    activities: [
+      'Desayuno en Villa Campanario',
+      'Cabalgata al Cerro Campanario',
+      'Almuerzo y descanso',
+      'Visita a Colonia Suiza',
+      'Regreso al hotel'
+    ],
+    icon: <Landscape />,
+    color: 'info',
+    description: 'Día de aventura, naturaleza y tradición en Bariloche',
+    url: '/day-4'
+  },
   // {
   //   day: 5,
   //   date: '29/11/2025',
