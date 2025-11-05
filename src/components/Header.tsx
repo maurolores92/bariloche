@@ -29,7 +29,7 @@ const itineraryMenu = [
   { day: 1, title: 'Viaje a Bahía Blanca', url: '/day-1' },
   { day: 2, title: 'Viaje a Bariloche', url: '/day-2' },
   { day: 3, title: 'San Martin de los Andes', url: '/day-3' },
-  // Agrega más días si es necesario
+  { day: 4, title: 'Cerro Campanario', url: '/day-4' },
 ];
 
 const Header = () => {
