@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { 
   AppBar, 
   Toolbar, 
@@ -14,7 +13,6 @@ import {
   ListItemText
 } from '@mui/material';
 import { 
-  LocationOn, 
   DateRange, 
   Flight, 
   CalendarToday, 

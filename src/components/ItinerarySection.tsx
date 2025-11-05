@@ -72,7 +72,7 @@ const itineraryData: DayActivity[] = [
   {
     day: 4,
     date: '28/11/2025',
-    title: 'Circuito Bariloche, Cerro Campanario y Colonia Suiza',
+    title: 'Cerro Campanario y Colonia Suiza',
     activities: [
       'Desayuno en Villa Campanario',
       'Cabalgata al Cerro Campanario',
