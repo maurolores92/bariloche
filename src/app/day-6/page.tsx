@@ -1,0 +1,596 @@
+'use client';
+
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { theme } from '@/theme/theme';
+import { 
+  Box, 
+  Typography, 
+  Container, 
+  Card,
+  CardContent,
+  Grid,
+  Button,
+  Chip,
+  Modal,
+  IconButton,
+  Paper,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider
+} from '@mui/material';
+import { 
+  ArrowBack,
+  DirectionsCar,
+  LocationOn,
+  Schedule,
+  LocalGasStation,
+  Close,
+  Image,
+  LocalGasStation as YpfIcon,
+  LocalGasStationOutlined as AxionIcon,
+  LocalParking as PumaIcon,
+  LocalDrink as ShellIcon
+} from '@mui/icons-material';
+
+// Datos del viaje (regreso)
+const routeData = {
+  origin: 'Bariloche, Río Negro',
+  destination: 'Bahía Blanca, Buenos Aires',
+  totalDistance: '1060 km',
+  estimatedTime: '12 horas 9 minutos',
+  fuelStops: 8,
+  restStops: 2,
+  mainRoute: 'Ruta Nacional 237, Ruta Nacional 22'
+};
+
+const stations = [
+  // Invertir el orden de las estaciones para el regreso
+  {
+    name: 'YPF Bariloche',
+    brand: 'ypf',
+    location: 'Bariloche, Río Negro',
+    km: 0,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'Shell Dina Huapi',
+    brand: 'shell',
+    location: 'Dina Huapi, Río Negro',
+    km: 40,
+    services: ['Combustible', 'Minimarket', 'Baños']
+  },
+  {
+    name: 'Estación de Servicio PUMA, La Meseta SRL',
+    brand: 'puma',
+    location: 'MF76+H77, Ingeniero Jacobacci, Río Negro',
+    km: 236,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'YPF ACA Los Menucos',
+    brand: 'ypf',
+    location: 'Ruta Nacional 23, RP8 y, R8424 Los Menucos, Río Negro',
+    km: 382,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'YPF Lujanera SRL',
+    brand: 'ypf',
+    location: 'YPF Lujanera SRL, R8536 Valcheta, Río Negro',
+    km: 575,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'SHELL San Antonio Oeste',
+    brand: 'shell',
+    location: 'Shell, RN251 Ruta 3, R8520 San Antonio Oeste, Río Negro',
+    km: 686,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'AXION Los Vascos',
+    brand: 'axion',
+    location: 'Ruta Nacional N° 251 Km. 119, Gral. Conesa, Río Negro',
+    km: 772,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'YPF Rio Colorado',
+    brand: 'ypf',
+    location: 'Av. Colón 1234, Bahía Blanca, Buenos Aires',
+    km: 930,
+    services: ['Combustible', 'Baños', 'Tienda']
+  },
+  {
+    name: 'YPF Bahía Blanca',
+    brand: 'ypf',
+    location: 'Bahía Blanca, Buenos Aires',
+    km: 1060,
+    services: ['Combustible', 'Baños', 'Tienda']
+  }
+];
+
+// Itinerario invertido para el regreso
+const itinerary = [
+  {
+    time: '07:00',
+    activity: 'Salida desde Bariloche',
+    description: 'Comienza el regreso rumbo a Bahía Blanca'
+  },
+  {
+    time: '07:10',
+    activity: 'YPF Bariloche',
+    description: 'Primera carga de combustible',
+    brand: 'ypf',
+    km: 0
+  },
+  {
+    time: '08:00',
+    activity: 'Shell Dina Huapi',
+    description: 'Parada para combustible y descanso',
+    brand: 'shell',
+    km: 40
+  },
+  {
+    time: '10:00',
+    activity: 'Estación de Servicio PUMA, La Meseta SRL',
+    description: 'Parada para combustible y snack',
+    brand: 'puma',
+    km: 236
+  },
+  {
+    time: '12:00',
+    activity: 'YPF ACA Los Menucos',
+    description: 'Parada para combustible y almuerzo',
+    brand: 'ypf',
+    km: 382
+  },
+  {
+    time: '14:00',
+    activity: 'YPF Lujanera SRL',
+    description: 'Parada para combustible y descanso',
+    brand: 'ypf',
+    km: 575
+  },
+  {
+    time: '15:30',
+    activity: 'SHELL San Antonio Oeste',
+    description: 'Parada para combustible y snack',
+    brand: 'shell',
+    km: 686
+  },
+  {
+    time: '17:00',
+    activity: 'AXION Los Vascos',
+    description: 'Parada para combustible y descanso',
+    brand: 'axion',
+    km: 772
+  },
+  {
+    time: '18:30',
+    activity: 'YPF Rio Colorado',
+    description: 'Última parada antes de llegar a destino',
+    brand: 'ypf',
+    km: 930
+  },
+  {
+    time: '19:30',
+    activity: 'YPF Bahía Blanca',
+    description: 'Llegada a Bahía Blanca y carga final',
+    brand: 'ypf',
+    km: 1060
+  }
+];
+
+// Tipo para spots turísticos de Bariloche
+type BarilocheSpot = {
+  title: string;
+  image: string;
+  mapsUrl: string;
+  category: string;
+  color?: string;
+};
+
+const Day6Page = () => {
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [spotModalOpen, setSpotModalOpen] = useState(false);
+  const [selectedSpot, setSelectedSpot] = useState<BarilocheSpot | null>(null);
+
+  const handleOpenImageModal = () => {
+    setImageModalOpen(true);
+  };
+
+  const handleCloseImageModal = () => {
+    setImageModalOpen(false);
+  };
+
+  const handleOpenSpotModal = (spot: BarilocheSpot) => {
+    setSelectedSpot(spot);
+    setSpotModalOpen(true);
+  };
+
+  const handleCloseSpotModal = () => {
+    setSpotModalOpen(false);
+    setSelectedSpot(null);
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
+      {/* Header */}
+      <Box sx={{ 
+        backgroundColor: 'background.paper',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100
+      }}>
+        <Container maxWidth="lg" sx={{ py: 2 }}>
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box display="flex" alignItems="center">
+              <Link href="/" passHref>
+                <IconButton sx={{ mr: 2, color: 'success.main' }}>
+                  <ArrowBack />
+                </IconButton>
+              </Link>
+              <Typography variant="h5" fontWeight="600" color="success">
+                Día 6: Regreso a Bahía Blanca
+              </Typography>
+            </Box>
+            <Chip
+              label="1060 KM"
+              color="primary"
+              variant="filled"
+              size="medium"
+            />
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Contenido principal */}
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        {/* Hero de la página */}
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <Card sx={{ mb: 4, position: 'relative', overflow: 'hidden' }}>
+            <Box
+              sx={{
+                backgroundImage: 'linear-gradient(135deg, #00d43593 0%, #1f740aff 100%)',
+                color: 'white',
+                p: 4
+              }}
+            >
+              <Grid container spacing={4} alignItems="center">
+                <Grid size={{ xs: 12, md: 8 }}>
+                  <Typography variant="h3" fontWeight="700" gutterBottom>
+                    Bariloche a Bahía Blanca
+                  </Typography>
+                  <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
+                    Finalizamos nuestra aventura patagónica y emprendemos el regreso
+                  </Typography>
+                  
+                  <Box display="flex" flexWrap="wrap" gap={2}>
+                    <Box display="flex" alignItems="center">
+                      <DirectionsCar sx={{ mr: 1 }} />
+                      <Typography>{routeData.totalDistance}</Typography>
+                    </Box>
+                    <Box display="flex" alignItems="center">
+                      <Schedule sx={{ mr: 1 }} />
+                      <Typography>{routeData.estimatedTime}</Typography>
+                    </Box>
+                    <Box display="flex" alignItems="center">
+                      <LocalGasStation sx={{ mr: 1 }} />
+                      <Typography>{routeData.fuelStops} paradas de combustible</Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+                
+                <Grid size={{ xs: 12, md: 4 }}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    sx={{background:'white'}}
+                    startIcon={<Image />}
+                    onClick={handleOpenImageModal}
+                  >
+                    Ver Mapa de Ruta
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Card>
+        </motion.div>
+
+        <Grid container spacing={4}>
+          {/* Imagen del mapa de ruta */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <motion.div
+              initial={{ x: -50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Card sx={{ height: 400 }}>
+                <CardContent sx={{ p: 0, height: '100%' }}>
+                  <Box
+                    sx={{
+                      height: '100%',
+                      cursor: 'pointer',
+                      position: 'relative',
+                      backgroundImage: 'url(/images/bahiablanca-bariloche.jpg)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundColor: '#2c2c2c'
+                    }}
+                    onClick={handleOpenImageModal}
+                  >
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 16,
+                        right: 16,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        color: 'white',
+                        px: 2,
+                        py: 1,
+                        borderRadius: 1,
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Image sx={{ mr: 1, fontSize: 16 }} />
+                      <Typography variant="caption">Ver imagen</Typography>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+
+          {/* Itinerario del día */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <motion.div
+              initial={{ x: 50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" fontWeight="600" gutterBottom color="success">
+                    Cronograma del Viaje
+                  </Typography>
+                  <List>
+                    {itinerary.map((item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                      >
+                        <ListItem sx={{ px: 0 }}>
+                          <ListItemIcon>
+                            <Box
+                              sx={{
+                                backgroundColor: item.brand === 'ypf' ? '#005baa' : item.brand === 'shell' ? '#ffd600' : item.brand === 'axion' ? '#c2185b' : item.brand === 'puma' ? '#43ea7c' : 'success.main',
+                                color: item.brand ? '#fff' : 'white',
+                                borderRadius: '50%',
+                                width: 40,
+                                height: 40,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                position: 'relative',
+                              }}
+                            >
+                              <Typography variant="body2" fontWeight="600" sx={{ zIndex: 2 }}>
+                                {item.time}
+                              </Typography>
+                            </Box>
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={
+                              <Typography variant="subtitle1" fontWeight="600">
+                                {item.activity}
+                                {item.km !== undefined && (
+                                  <span style={{ color: '#888', fontWeight: 400, fontSize: '0.95em', marginLeft: 8 }}>
+                                    (KM {item.km})
+                                  </span>
+                                )}
+                              </Typography>
+                            }
+                            secondary={item.description}
+                          />
+                        </ListItem>
+                        {index < itinerary.length - 1 && <Divider sx={{ my: 1 }} />}
+                      </motion.div>
+                    ))}
+                  </List>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+
+          {/* Estaciones y paradas */}
+          <Grid size={{ xs: 12 }}>
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Typography variant="h5" fontWeight="600" gutterBottom color="success">
+                Estaciones y Paradas Estratégicas
+              </Typography>
+              <Grid container spacing={3}>
+                {stations.map((station, index) => (
+                  <Grid size={{ xs: 12, md: 4 }} key={index}>
+                    <motion.div
+                      initial={{ y: 30, opacity: 0 }}
+                      whileInView={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.6, delay: index * 0.2 }}
+                      viewport={{ once: true }}
+                    >
+                      <Card sx={{ height: '100%' }}>
+                        <CardContent>
+                          <Box display="flex" alignItems="center" mb={2}>
+                            {/* Icono de la marca */}
+                            {station.brand === 'ypf' && <YpfIcon sx={{ color: '#005baa', mr: 1.2 }} />}
+                            {station.brand === 'shell' && <ShellIcon sx={{ color: '#ffd600', mr: 1.2 }} />}
+                            {station.brand === 'axion' && <AxionIcon sx={{ color: '#c2185b', mr: 1.2 }} />}
+                            {station.brand === 'puma' && <PumaIcon sx={{ color: '#43ea7c', mr: 1.2 }} />}
+                            <Typography variant="h6" fontWeight="600">
+                              {station.name}
+                            </Typography>
+                          </Box>
+                          <Typography variant="body2" color="text.secondary" gutterBottom>
+                            {station.location}
+                          </Typography>
+                          <Chip
+                            label={`KM ${station.km}`}
+                            size="small"
+                            color="secondary"
+                            sx={{ mb: 2 }}
+                          />
+                          <Box display="flex" flexWrap="wrap" gap={1}>
+                            {station.services.map((service, serviceIndex) => (
+                              <Chip
+                                key={serviceIndex}
+                                label={service}
+                                variant="outlined"
+                                size="small"
+                              />
+                            ))}
+                          </Box>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </Grid>
+                ))}
+              </Grid>
+            </motion.div>
+          </Grid>
+        </Grid>
+      </Container>
+
+      {/* Modal de la imagen en pantalla completa */}
+      <Modal
+        open={imageModalOpen}
+        onClose={handleCloseImageModal}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Paper
+          sx={{
+            width: '95vw',
+            height: '90vh',
+            position: 'relative',
+            overflow: 'hidden',
+            backgroundColor: 'background.paper'
+          }}
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              zIndex: 1000,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              borderRadius: '50%'
+            }}
+          >
+            <IconButton onClick={handleCloseImageModal} sx={{ color: 'white' }}>
+              <Close />
+            </IconButton>
+          </Box>
+          <Box 
+            sx={{ 
+              width: '100%', 
+              height: '100%',
+              backgroundImage: 'url(/images/mdp-bahiablanca.jpg)',
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#1e1e1e'
+            }}
+          />
+        </Paper>
+      </Modal>
+
+      {/* Sección: Lugares turísticos para visitar en Bariloche */}
+      <Container maxWidth="sm" sx={{ py: 6 }}>
+
+        {/* Modal para mostrar el enlace de Google Maps */}
+        <Modal
+          open={spotModalOpen}
+          onClose={handleCloseSpotModal}
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <Paper sx={{ p: 3, borderRadius: 3, minWidth: 320, textAlign: 'center' }}>
+            <Typography variant="h6" fontWeight="600" gutterBottom>
+              {selectedSpot?.title}
+            </Typography>
+            <Box
+              sx={{
+                width: '100%',
+                height: 180,
+                backgroundImage: `url(${selectedSpot?.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: 2,
+                mb: 1.5
+              }}
+            />
+            {selectedSpot && (
+              <Chip
+                label={selectedSpot.category}
+                size="small"
+                sx={{
+                  backgroundColor: `${selectedSpot.color || '#1976d2'}22`,
+                  color: selectedSpot.color || '#1976d2',
+                  fontWeight: 500,
+                  mb: 1,
+                  mx: 'auto',
+                  display: 'block'
+                }}
+              />
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              component="a"
+              href={selectedSpot ? selectedSpot.mapsUrl : "#"}
+              sx={{ mt: 2 }}
+              {...(selectedSpot ? { target: "_blank", rel: "noopener" } : {})}
+            >
+              Ver en Google Maps
+            </Button>
+            <Button onClick={handleCloseSpotModal} sx={{ mt: 2 }} fullWidth>
+              Cerrar
+            </Button>
+          </Paper>
+        </Modal>
+      </Container>
+      </Box>
+    </ThemeProvider>
+  );
+};
+
+export default Day6Page;

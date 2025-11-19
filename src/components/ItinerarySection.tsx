@@ -85,36 +85,50 @@ const itineraryData: DayActivity[] = [
     description: 'Día de aventura, naturaleza y tradición en Bariloche',
     url: '/day-4'
   },
-  // {
-  //   day: 5,
-  //   date: '29/11/2025',
-  //   title: 'Aventura en Cerro Otto',
-  //   activities: ['Teleférico Cerro Otto', 'Casa de Té Giratoria', 'Actividades de aventura', 'Compras en el centro'],
-  //   icon: <LocalActivity />,
-  //   color: 'secondary',
-  //   description: 'Adrenalina y vistas panorámicas',
-  //   url: '/day-5'
-  // },
-  // {
-  //   day: 6,
-  //   date: '30/11/2025',
-  //   title: 'Día de Relax',
-  //   activities: ['Descanso en el hotel', 'Spa y relajación', 'Paseo por la costanera', 'Cena especial de despedida'],
-  //   icon: <Restaurant />,
-  //   color: 'error',
-  //   description: 'Última noche en el paraíso patagónico',
-  //   url: '/day-6'
-  // },
-  // {
-  //   day: 7,
-  //   date: '01/12/2025',
-  //   title: 'Regreso a casa',
-  //   activities: ['Desayuno tranquilo', 'Check-out del hotel', 'Últimas compras', 'Vuelo Bariloche - Buenos Aires'],
-  //   icon: <FlightLand />,
-  //   color: 'primary',
-  //   description: 'Con el corazón lleno de recuerdos',
-  //   url: '/day-7'
-  // }
+  {
+    day: 5,
+    date: '29/11/2025',
+    title: 'Cerro Tronador y Ventisquero Negro',
+    activities: [
+      'Salida desde el hotel',
+      'Parada en Playa Negra',
+      'Mirador Isla Corazón',
+      'Camping Pampa Linda',
+      'Lago Ventisquero Negro',
+      'Garganta del Diablo',
+      'Regreso al hotel'
+    ],
+    icon: <Landscape />,
+    color: 'secondary',
+    description: 'Día de naturaleza, aventura y paisajes únicos en el Parque Nacional Nahuel Huapi',
+    url: '/day-5'
+  },
+  {
+    day: 6,
+    date: '30/11/2025',
+    title: 'Viaje a Bahia Blanca',
+    activities: [
+      'Salida desde Bariloche',
+      'Paradas en estaciones de servicio',
+      'Llegada a Bahía Blanca',
+      'Check-in hotel'
+    ],
+    icon: <Hiking />,
+    color: 'success',
+    description: 'Gran travesía por la Patagonia rumbo a Bahia Blanca',
+    url: '/day-6'
+  },
+  {
+    day: 7,
+    date: '25/11/2025',
+    title: 'Viaje a Santa Clara del Mar',
+    activities: ['Salida desde Bahia Blanca', 'Paradas estratégicas', 'Llegada a Santa Clara del Mar', 'Check-in hotel'],
+    icon: <FlightLand />,
+    color: 'primary',
+    description: 'Con el corazón lleno de recuerdos',
+    url: '/day-7'
+  },
+
 ];
 
 const ItinerarySection = () => {
